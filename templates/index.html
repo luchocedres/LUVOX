@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> LUVOX | Ecosistema Tecnológico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body class="bg-[#030712] overflow-x-hidden min-h-screen flex flex-col justify-between" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+
+    <header class="bg-[#030712]/80 backdrop-blur-md border-b border-gray-900 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="/" onclick="regresarAlCatalogo(event)" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform" style="font-family: 'Space Grotesk', sans-serif;">L</div>
+                <div>
+                    <span class="font-bold text-xl tracking-tight text-white block" style="font-family: 'Space Grotesk', sans-serif;">LUVOX</span>
+                    <span class="text-[9px] block text-gray-500 font-medium tracking-widest uppercase">Ecosistema Hardware</span>
+                </div>
+
+
+            </a>
+            <div class="flex items-center gap-4">
+                <button onclick="toggleCart()" class="relative p-2.5 rounded-full bg-gray-950 border border-gray-800 text-gray-400 hover:text-cyan-400 hover:border-cyan-500/50 transition-colors cursor-pointer">
+                    <i class="fa-solid fa-shopping-cart text-sm"></i>
+                    <span id="cartCount" class="absolute -top-1 -right-1 bg-gradient-to-r from-purple-500 to-cyan-500 text-white text-[9px] font-bold rounded-full w-4 h-4 flex items-center justify-center font-mono">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+
+<header class="w-full bg-slate-950/80 backdrop-blur-md border-b border-purple-900/20 py-8 relative overflow-hidden select-none">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-20 bg-purple-600/10 blur-[60px] rounded-full pointer-events-none"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 flex flex-col items-center justify-center relative z-10">
+        <div class="relative group cursor-pointer">
+            <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 rounded-2xl blur opacity-30 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            
+            <h1 class="relative font-black text-5xl md:text-7xl tracking-[0.25em] pl-[0.25em] text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-400 to-cyan-400 font-sans uppercase filter drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+                LUVOX
+        </div>
+        
+        <p class="text-[10px] md:text-xs font-bold text-cyan-400/80 tracking-[0.4em] uppercase mt-3 pl-[0.4em] font-mono">
+            Hardware & Home Ecosystem
+        </p>
+        
+        <div class="w-24 h-[2px] bg-gradient-to-r from-transparent via-purple-500 to-transparent mt-4 relative">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 bg-cyan-400 rounded-full animate-ping"></div>
+        </div>
+    </div>
+</header>
+
+
+    <main id="mainStoreContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-12">
+        
+        
+<div class="max-w-7xl mx-auto px-4 mb-8">
+    <div class="relative bg-gradient-to-r from-purple-950/20 via-slate-950/40 to-slate-900/20 border border-purple-900/30 rounded-2xl p-6 md:p-8 overflow-hidden backdrop-blur-sm">
+        
+        <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-48 h-48 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium font-mono bg-purple-950/60 text-purple-400 border border-purple-800/40 mb-3">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse"></span>
+                Ecosistema Activo v1.0
+            </span>
+            
+            <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight mb-2">
+                Hardware de Alto Rendimiento para tu Setup
+            </h1>
+            
+            <p class="text-sm md:text-base text-gray-400 leading-relaxed font-sans">
+                Bienvenido a <span class="text-purple-400 font-bold font-mono">LUVOX</span>. Diseñamos y seleccionamos periféricos y componentes optimizados para llevar tu productividad y tus partidas al siguiente nivel. Explorá nuestro catálogo de hardware certificado, gestioná tu orden de forma directa y configurá tu espacio de trabajo con tecnología de vanguardia.
+            </p>
+        </div>
+    </div>
+</div>
+        <section id="tiendaSection" class="space-y-8">
+            <div class="bg-gray-900/40 backdrop-blur-md p-4 rounded-2xl border border-gray-900 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
+                <div class="relative w-full md:w-80">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                    <input type="text" id="storeSearchInput" oninput="filtrarCatalogo()" placeholder="Buscar hardware por nombre o categoría..." class="w-full bg-slate-950 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                </div>
+                <div id="categoriesNavContainer" class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 font-mono text-[10px]">
+                </div>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 rounded-lg bg-cyan-950/40 border border-cyan-800/30 flex items-center justify-center text-cyan-400 text-sm"><i class="fa-solid fa-microchip"></i></div>
+                    <h2 class="font-bold text-lg text-white" style="font-family: 'Space Grotesk', sans-serif;">Hardware Available</h2>
+                </div>
+                <div id="productsLoading" class="text-center py-12">
+                    <i class="fa-solid fa-circle-notch animate-spin text-3xl text-cyan-500"></i>
+                </div>
+                <div id="productsGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-4">
+                <div class="p-6 bg-gradient-to-br from-slate-950 to-purple-950/20 rounded-2xl border border-gray-900 flex flex-col justify-center relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-bolt text-purple-400 text-xs"></i>
+                        <h3 class="font-bold text-white text-base uppercase tracking-wide" style="font-family: 'Space Grotesk', sans-serif;">Elevá tus estándares operativos</h3>
+                    </div>
+                    <p class="text-[11px] text-gray-400 font-mono leading-relaxed">
+                        LUVOX no es solo hardware; es un ecosistema diseñado para optimizar tu setup al máximo nivel de confort y facha. Seleccionamos periféricos de alta fidelidad, soportes ergonómicos y elementos de decoración conceptuales para asegurar que cada flujo de datos, cada pulsación y cada rincón de tu espacio gamer sea perfecto. Rediseñá tu entorno.
+                    </p>
+                </div>
+
+                <div class="max-w-7xl mx-auto px-4 my-12">
+    <div class="bg-slate-950/40 border border-gray-900 rounded-2xl p-6 md:p-8 backdrop-blur-sm">
+        
+        <h3 class="flex items-center gap-2 text-white font-bold tracking-wider uppercase text-sm mb-6">
+            <i class="fa-solid fa-envelope text-cyan-400"></i> Contactar al Nodo Central (Gmail)
+        </h3>
+
+        <form action="https://formsubmit.co/lucho.cedres.7@gmail.com" method="POST" class="space-y-4">
+            
+            <input type="hidden" name="_next" value="http://127.0.0.1:5000/"> <input type="hidden" name="_subject" value="🚀 LUVOX: Nueva consulta en el ecosistema">
+            <input type="hidden" name="_captcha" value="false"> <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <input type="text" name="name" placeholder="TU NOMBRE" required
+                        class="w-full bg-slate-950/60 border border-gray-900 rounded-xl px-4 py-3 text-sm text-gray-300 placeholder-gray-700 focus:outline-none focus:border-purple-600 transition-colors uppercase font-mono">
+                </div>
+                <div>
+                    <input type="email" name="email" placeholder="TU EMAIL" required
+                        class="w-full bg-slate-950/60 border border-gray-900 rounded-xl px-4 py-3 text-sm text-gray-300 placeholder-gray-700 focus:outline-none focus:border-purple-600 transition-colors uppercase font-mono">
+                </div>
+            </div>
+
+            <div>
+                <textarea name="message" rows="4" placeholder="SISTEMA DE CONSULTA: ESCRIBÍ TU MENSAJE AQUÍ..." required
+                    class="w-full bg-slate-950/60 border border-gray-900 rounded-xl px-4 py-3 text-sm text-gray-300 placeholder-gray-700 focus:outline-none focus:border-purple-600 transition-colors font-mono resize-none"></textarea>
+            </div>
+
+            <button type="submit" 
+                class="w-full py-3 bg-cyan-950/40 border border-cyan-800 text-cyan-400 font-bold rounded-xl text-xs uppercase tracking-widest hover:bg-cyan-500 hover:text-slate-950 transition-all duration-300 cursor-pointer text-center block">
+                Transmitir Consulta
+            </button>
+        </form>
+
+    </div>
+</div>
+
+            <div class="w-full bg-slate-950/40 backdrop-blur-md rounded-2xl border border-gray-900 p-5 grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+            <div class="flex flex-col items-center p-2">
+                <div class="w-8 h-8 rounded-full bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-2 shadow-[0_0_10px_rgba(34,211,238,0.1)]">
+                    <i class="fa-solid fa-truck-fast text-xs"></i>
+                </div>
+                <h4 class="font-bold text-white text-[11px] uppercase tracking-wider" style="font-family: 'Space Grotesk', sans-serif;">Envíos Blindados</h4>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 leading-relaxed">Despachos a todo el país vía Andreani y Correo Argentino con tracking en tiempo real.</p>
+            </div>
+            <div class="flex flex-col items-center p-2">
+                <div class="w-8 h-8 rounded-full bg-purple-950 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-2 shadow-[0_0_10px_rgba(168,85,247,0.1)]">
+                    <i class="fa-solid fa-shield-halved text-xs"></i>
+                </div>
+                <h4 class="font-bold text-white text-[11px] uppercase tracking-wider" style="font-family: 'Space Grotesk', sans-serif;">Control de Calidad</h4>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 leading-relaxed">Cada componente pasa por un testeo riguroso de laboratorio antes de ser inyectado al contenedor.</p>
+            </div>
+            <div class="flex flex-col items-center p-2">
+                <div class="w-8 h-8 rounded-full bg-cyan-950 border border-cyan-500/30 flex items-center justify-center text-cyan-400 mb-2 shadow-[0_0_10px_rgba(34,211,238,0.1)]">
+                    <i class="fa-solid fa-headset text-xs"></i>
+                </div>
+                <h4 class="font-bold text-white text-[11px] uppercase tracking-wider" style="font-family: 'Space Grotesk', sans-serif;">Nodo de Soporte 24/7</h4>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 leading-relaxed">Navegación asistida. Asistencia inteligente y contacto directo por WhatsApp ante dudas técnicas.</p>
+            </div>
+            <div class="flex flex-col items-center p-2">
+                <div class="w-8 h-8 rounded-full bg-purple-950 border border-purple-500/30 flex items-center justify-center text-purple-400 mb-2 shadow-[0_0_10px_rgba(168,85,247,0.1)]">
+                    <i class="fa-solid fa-microchip text-xs"></i>
+                </div>
+                <h4 class="font-bold text-white text-[11px] uppercase tracking-wider" style="font-family: 'Space Grotesk', sans-serif;">Ecosistema Seguro</h4>
+                <p class="text-[10px] text-gray-500 font-mono mt-1 leading-relaxed">Pasarela de registro directo. Tu transferencia impacta al instante en nuestra cola de validación.</p>
+            </div>
+        </div>
+
+            <div class="max-w-3xl mx-auto pt-4 space-y-3 font-mono text-[11px]">
+                <h3 class="font-bold text-center text-white text-xs uppercase tracking-wider mb-6" style="font-family: 'Space Grotesk', sans-serif;">
+                    <span class="text-purple-400">&lt;</span> Protocolos de Soporte / FAQ <span class="text-purple-400">&gt;</span>
+                </h3>
+                
+                <div class="bg-slate-950/30 border border-gray-900 rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full p-4 flex items-center justify-between text-left text-white font-bold uppercase tracking-wide hover:bg-slate-950/50 transition-colors focus:outline-none group">
+                        <span>¿Cómo calculo el costo de envío de mis productos?</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] text-gray-500 group-hover:text-cyan-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-950/10">
+                        <p class="p-4 text-gray-400 leading-relaxed border-t border-gray-900/40">
+                            Trabajamos bajo la modalidad de <span class="text-cyan-400">envío a pagar en destino</span>. Esto significa que en nuestra web solo abonás el valor neto del hardware o decoración. El costo del transporte lo pagás directamente a Andreani o Correo Argentino en el momento que retires el paquete por sucursal o cuando llegue a la puerta de tu domicilio.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/30 border border-gray-900 rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full p-4 flex items-center justify-between text-left text-white font-bold uppercase tracking-wide hover:bg-slate-950/50 transition-colors focus:outline-none group">
+                        <span>¿Cuánto tarda en despacharse y llegar el hardware?</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] text-gray-500 group-hover:text-cyan-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-950/10">
+                        <p class="p-4 text-gray-400 leading-relaxed border-t border-gray-900/40">
+                            Una vez que registramos tu transferencia bancaria y se valida en nuestro nodo central, el paquete se embala con protección de alta seguridad y se despacha en menos de 24 horas hábiles. Las empresas de correo (Andreani / Correo Argentino) demoran entre 2 y 5 días hábiles en realizar la entrega según tu localidad.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/30 border border-gray-900 rounded-xl overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full p-4 flex items-center justify-between text-left text-white font-bold uppercase tracking-wide hover:bg-slate-950/50 transition-colors focus:outline-none group">
+                        <span>¿Cómo realizo el seguimiento dinámico de mi paquete?</span>
+                        <i class="fa-solid fa-chevron-down text-[9px] text-gray-500 group-hover:text-cyan-400 transition-transform duration-300"></i>
+                    </button>
+                    <div class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-slate-950/10">
+                        <p class="p-4 text-gray-400 leading-relaxed border-t border-gray-900/40">
+                            En el momento exacto en que entregamos tu caja al correo, actualizaremos el estado de tu despacho en nuestro sistema. Recibirás una notificación por los canales de contacto provistos con tu <span class="text-purple-400">Código de Tracking (Seguimiento)</span> exclusivo. Con ese código vas a poder monitorear la geolocalización exacta de tu setup en la plataforma oficial del transporte seleccionado.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="detalleProductoSection" class="hidden bg-gray-900/30 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-gray-800 shadow-2xl max-w-5xl mx-auto"></section>
+
+        <section id="checkoutSection" class="hidden bg-gray-900/30 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-gray-800 max-w-2xl mx-auto shadow-2xl space-y-6">
+            <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center text-white text-sm"><i class="fa-solid fa-credit-card"></i></div>
+                    <h3 class="font-bold text-base text-white" style="font-family: 'Space Grotesk', sans-serif;">Verificación de Pago y Despacho</h3>
+                </div>
+                <button onclick="cancelarCheckout()" class="text-xs text-gray-500 hover:text-white font-mono"><i class="fa-solid fa-arrow-left mr-1"></i> Volver</button>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-gray-900 space-y-2 text-xs font-mono">
+                <div class="text-cyan-400 font-bold uppercase tracking-wider text-[10px]"><i class="fa-solid fa-bank mr-1"></i> Cuenta Única de Recepción:</div>
+                <div class="text-gray-300 flex items-center justify-between py-0.5">
+                    <span>Banco: <span class="text-white">Mercado Pago</span></span>
+                </div>
+                <div class="text-gray-300 flex items-center justify-between border-t border-gray-900/50 pt-1.5">
+                    <span>Alias: <span id="txtAlias" class="text-white select-all">luvox.ecosistema.mp</span></span>
+                    <button onclick="copyToClipboard('luvox.ecosistema.mp', this)" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded text-[10px] transition-colors"><i class="fa-regular fa-copy mr-1"></i>Copiar</button>
+                </div>
+                <div class="text-gray-300 flex items-center justify-between border-t border-gray-900/50 pt-1.5">
+                    <span>CBU: <span id="txtCbu" class="text-white select-all">0000003100012345678901</span></span>
+                    <button onclick="copyToClipboard('0000003100012345678901', this)" class="bg-gray-900 hover:bg-gray-800 border border-gray-800 text-cyan-400 hover:text-cyan-300 px-2 py-1 rounded text-[10px] transition-colors"><i class="fa-regular fa-copy mr-1"></i>Copiar</button>
+                </div>
+                <p class="text-[10px] text-purple-400 mt-2 italic">Realizá la transferencia antes de rellenar el formulario. El sistema requiere adjuntar el código de transacción de manera obligatoria para procesar y validar el pedido.</p>
+            </div>
+
+            <form id="checkoutForm" onsubmit="procesarOrdenDirecta(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Nombre Completo</label>
+                        <input type="text" id="checkoutName" required class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Teléfono de Contacto</label>
+                        <input type="tel" id="checkoutPhone" required class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Correo Electrónico (Gmail)</label>
+                        <input type="email" id="checkoutEmail" required placeholder="ejemplo@gmail.com" class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Método de Logística</label>
+                        <select id="checkoutShippingMethod" required class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500 transition-colors font-mono">
+                            <option value="" disabled selected class="bg-gray-950 text-gray-600">SELECCIONAR ENVÍO</option>
+                            <option value="Andreani" class="bg-gray-950">ANDREANI (PAGO EN DESTINO)</option>
+                            <option value="Correo Argentino" class="bg-gray-950">CORREO ARGENTINO (PAGO EN DESTINO)</option>
+                            <option value="Retiro Local" class="bg-gray-950">RETIRO LOCAL / DISTRIBUCIÓN</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Localidad de Entrega</label>
+                        <input type="text" id="checkoutCity" required placeholder="Ej: Gualeguaychú" class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase tracking-wider text-gray-400 font-bold mb-1">Dirección Exacta / Calle y N° / Aula</label>
+                        <input type="text" id="checkoutAddress" required placeholder="Ej: Clavarino 1807" class="w-full bg-slate-900/90 border border-gray-700 rounded-xl px-3 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 transition-colors">
+                    </div>
+                </div>
+
+                <div class="p-4 bg-purple-950/20 border border-purple-900/40 rounded-xl space-y-3">
+                    <label class="block text-[10px] uppercase tracking-wider text-purple-400 font-bold font-mono"><i class="fa-solid fa-receipt mr-1"></i> Referencia de Pago / ID de Transferencia</label>
+                    <input type="text" id="checkoutPaymentRef" required placeholder="Ej: 28495039281" class="w-full bg-slate-900/90 border border-purple-800/60 rounded-xl px-3 py-2.5 text-xs text-white placeholder-purple-900/40 focus:outline-none focus:border-cyan-400 transition-colors font-mono">
+                </div>
+
+                <div class="bg-gray-950 rounded-2xl p-4 border border-gray-800 text-xs space-y-2 font-mono">
+                    <div class="flex justify-between text-gray-400"><span>Subtotal Neto:</span><span id="summarySubtotal" class="text-white">$0</span></div>
+                    <div class="flex justify-between text-gray-400"><span>Costo logístico:</span><span class="text-emerald-400">A pagar en destino</span></div>
+                    <div class="h-[1px] bg-gray-800 my-1"></div>
+                    <div class="flex justify-between font-bold text-sm text-white"><span>Total Transferido:</span><span id="summaryTotal" class="text-cyan-400">$0</span></div>
+                </div>
+
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white font-bold text-xs rounded-xl uppercase tracking-wider transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer font-mono">
+                    <i class="fa-solid fa-shield-check text-xs"></i> Enviar Pedido para Validación
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <div id="cartDrawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-gray-900/95 backdrop-blur-lg border-l border-gray-800 transform translate-x-full transition-transform duration-300 flex flex-col justify-between shadow-2xl">
+        <div class="p-5 border-b border-gray-800 flex items-center justify-between">
+            <h3 class="font-bold text-sm text-white" style="font-family: 'Space Grotesk', sans-serif;"><i class="fa-solid fa-shopping-basket text-cyan-400 mr-2"></i>Tu Carrito</h3>
+            <button onclick="toggleCart()" class="text-gray-400 hover:text-white transition-colors cursor-pointer"><i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        
+        <div id="cartItemsContainer" class="p-5 flex-1 overflow-y-auto space-y-3"></div>
+        
+        <div class="p-5 border-t border-gray-800 bg-gray-950/80 space-y-3 text-xs">
+            <div class="flex justify-between text-white font-bold text-sm font-mono"><span>Total Neto:</span><span id="cartTotal" class="text-cyan-400">$0</span></div>
+            <button onclick="abrirCheckout()" class="w-full py-3 bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-95 text-white font-bold text-xs uppercase tracking-wider rounded-xl shadow-md transition-all cursor-pointer font-mono">
+                Iniciar Registro de Pago
+            </button>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-4 left-4 z-50 bg-gray-950 border border-cyan-500/20 text-white px-4 py-3 rounded-2xl text-xs opacity-0 translate-y-10 transition-all duration-300 font-mono shadow-xl flex items-center gap-2">
+        <i class="fa-solid fa-bell text-purple-400"></i>
+        <span id="toastMessage"></span>
+    </div>
+
+    <footer class="bg-gray-950/40 border-t border-gray-900 py-4 text-center text-xs text-gray-500 font-mono">
+        <p>© 2026 LUVOX Store. Todos los derechos reservados.</p>
+        <p>Creada por Cedres Luciano.</p>
+        <p>📞 +5403446332679</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+
+    <div id="paymentOverlay" class="fixed inset-0 bg-slate-950/90 backdrop-blur-lg z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-900 border border-gray-800 rounded-3xl p-8 max-w-sm w-full text-center space-y-6 shadow-2xl relative overflow-hidden">
+            
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -right-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl"></div>
+
+            <div id="paymentStateProcessing" class="space-y-4 py-4">
+                <div class="relative w-16 h-16 mx-auto flex items-center justify-center">
+                    <div class="absolute inset-0 border-4 border-purple-500/20 rounded-full"></div>
+                    <div class="absolute inset-0 border-4 border-t-purple-500 rounded-full animate-spin"></div>
+                    <div class="absolute w-10 h-10 border-4 border-b-cyan-500 rounded-full animate-spin duration-300"></div>
+                </div>
+                <div class="space-y-1">
+                    <h4 class="text-white font-bold text-base font-display">Verificando Transacción</h4>
+                    <p class="text-[11px] text-gray-400 font-mono animate-pulse">Estableciendo conexión segura con LUVOX Lab...</p>
+                </div>
+            </div>
+
+            <div id="paymentStateApproved" class="hidden space-y-5 transform scale-95 opacity-0 transition-all duration-500">
+                <div class="w-16 h-16 bg-gradient-to-tr from-emerald-500 to-teal-400 rounded-full mx-auto flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                    <i class="fa-solid fa-check text-white text-2xl"></i>
+                </div>
+                <div class="space-y-1">
+                    <h4 class="text-emerald-400 font-bold text-base font-display tracking-wide">¡PAGO REGISTRADO!</h4>
+                    <p class="text-[11px] text-gray-300 font-mono">Comprobante recibido correctamente.</p>
+                </div>
+                
+                <div class="bg-slate-950 p-4 rounded-xl border border-gray-800 text-left space-y-2 font-mono text-[11px]">
+                    <div class="text-gray-400 flex justify-between"><span>ID Orden:</span><span id="approvedOrderId" class="text-cyan-400 font-bold">#LX-XXXX</span></div>
+                    <div class="text-gray-400 flex justify-between"><span>Monto:</span><span id="approvedTotal" class="text-white font-bold">$0</span></div>
+                    <div class="text-gray-400 flex justify-between"><span>Validación:</span><span class="text-amber-400 uppercase font-bold animate-pulse">Pendiente</span></div>
+                </div>
+
+                <p class="text-[10px] text-gray-400 leading-relaxed">Te enviamos un correo con los detalles de tu orden. Podés notificarnos por WhatsApp de forma opcional para agilizar el despacho o simplemente finalizar el proceso acá.</p>
+
+                <div class="space-y-2 pt-2">
+                    <button onclick="enviarNotificacionWhatsApp(true)" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:opacity-90 text-white text-xs font-bold font-mono uppercase tracking-wider rounded-xl shadow-md cursor-pointer transition-opacity flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-sm"></i> Notificar por WhatsApp (Opcional)
+                    </button>
+                    <button onclick="enviarNotificacionWhatsApp(false)" class="w-full py-2.5 bg-gray-950 border border-gray-800 text-gray-400 hover:text-white text-[11px] font-mono font-bold rounded-xl transition-colors cursor-pointer">
+                        Finalizar compra
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="chat-widget-btn" onclick="toggleChat()" class="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-tr from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-full flex items-center justify-center shadow-[0_0_20px_rgba(147,51,234,0.5)] cursor-pointer transition-all hover:scale-110 z-50 group">
+    <i class="fa-solid fa-headset text-xl group-hover:rotate-12 transition-transform"></i>
+</div>
+
+<div id="chat-window" class="fixed bottom-24 right-6 w-85 sm:w-96 h-[500px] bg-slate-950 border border-purple-900/30 rounded-2xl flex flex-col shadow-[0_10px_40px_rgba(0,0,0,0.7),0_0_20px_rgba(147,51,234,0.15)] hidden z-50 overflow-hidden font-sans backdrop-blur-md">
+    
+    <div class="p-4 bg-gradient-to-r from-purple-950 via-slate-950 to-slate-950 border-b border-purple-900/20 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-purple-500"></span>
+            </div>
+            <div>
+                <h4 class="text-xs font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-300 tracking-wider uppercase">Soporte Luvox</h4>
+                <p class="text-[10px] text-gray-400">Online • Respuestas automáticas</p>
+            </div>
+        </div>
+        <button onclick="toggleChat()" class="text-gray-500 hover:text-white cursor-pointer transition-colors p-1">
+            <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+    </div>
+
+    <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 scroll-smooth text-gray-300" style="scrollbar-width: none;">
+        <div class="flex items-start gap-2 max-w-[85%] animate-fade-in">
+            <div class="bg-slate-900/90 border border-slate-800 text-gray-200 text-xs p-3 rounded-2xl rounded-tl-none leading-relaxed shadow-sm">
+                👋 ¡Buenas! Soy el asistente virtual de la plataforma. ¿En qué te puedo dar una mano hoy con tu hardware?
+            </div>
+        </div>
+    </div>
+
+    <div id="chat-typing-indicator" class="px-4 py-2 hidden">
+        <div class="flex items-center gap-1.5 bg-slate-900/50 border border-slate-800/60 w-16 p-2 rounded-2xl rounded-tl-none justify-center">
+            <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+            <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+            <div class="w-1.5 h-1.5 bg-purple-500 rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+        </div>
+    </div>
+
+    <div id="chat-options-panel" class="p-3 border-t border-slate-900 bg-slate-950/80 flex flex-wrap gap-1.5 justify-center">
+        <button onclick="seleccionarOpcion('pagos')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            💳 Pagos
+        </button>
+        <button onclick="seleccionarOpcion('envios')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            📦 Envíos
+        </button>
+        <button onclick="seleccionarOpcion('estado_orden')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            🚀 Mi Orden
+        </button>
+        <button onclick="seleccionarOpcion('garantia')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            🛡️ Garantías
+        </button>
+        <button onclick="seleccionarOpcion('ubicacion')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            📍 Retiros
+        </button>
+        <button onclick="seleccionarOpcion('soporte')" class="px-3 py-1.5 bg-purple-950/20 border border-purple-900/40 hover:border-purple-500 hover:bg-purple-600/20 text-purple-300 hover:text-white rounded-xl text-[10px] font-medium transition-all cursor-pointer">
+            👨‍💻 Técnico
+        </button>
+    </div>
+
+    <div id="chat-input-container" class="p-3 border-t border-slate-900 bg-slate-950 hidden">
+        <div class="flex gap-2 bg-slate-900 border border-slate-800 focus-within:border-purple-500/50 rounded-xl p-1 items-center transition-colors">
+            <input type="text" id="chat-user-input" placeholder="Escribí el número de orden..." class="flex-1 bg-transparent text-xs text-white px-2 focus:outline-none placeholder-gray-600">
+            <button id="chat-send-btn" class="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-lg flex items-center justify-center hover:opacity-90 cursor-pointer transition-opacity">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        const chatWindow = document.getElementById("chat-window");
+        if (chatWindow) {
+            chatWindow.classList.toggle("hidden");
+            scrollChatAlFinal();
+        }
+    }
+
+    function scrollChatAlFinal() {
+        const container = document.getElementById("chat-messages");
+        if (container) container.scrollTop = container.scrollHeight;
+    }
+
+    // Muestra/Oculta la animación de tres puntitos
+    function setTyping(isTyping) {
+        const indicator = document.getElementById("chat-typing-indicator");
+        if (!indicator) return;
+        if (isTyping) {
+            indicator.classList.remove("hidden");
+        } else {
+            indicator.classList.add("hidden");
+        }
+        scrollChatAlFinal();
+    }
+
+    function appendMensaje(texto, esUsuario = false) {
+        const container = document.getElementById("chat-messages");
+        if (!container) return;
+
+        const wrapper = document.createElement("div");
+        if(esUsuario) {
+            wrapper.className = "flex justify-end w-full animate-fade-in";
+            wrapper.innerHTML = `
+                <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs p-3 rounded-2xl rounded-tr-none max-w-[85%] shadow-md select-none">
+                    ${texto}
+                </div>
+            `;
+        } else {
+            wrapper.className = "flex items-start gap-2 max-w-[85%] animate-fade-in";
+            wrapper.innerHTML = `
+                <div class="bg-slate-900/90 border border-slate-800/80 text-gray-200 text-xs p-3 rounded-2xl rounded-tl-none leading-relaxed shadow-sm">
+                    ${texto}
+                </div>
+            `;
+        }
+        container.appendChild(wrapper);
+        scrollChatAlFinal();
+    }
+
+    // Envía una respuesta simulando el delay humano de tipeo
+    function responderConDelay(textoHtml, delay = 1000) {
+        setTyping(true);
+        setTimeout(() => {
+            setTyping(false);
+            appendMensaje(textoHtml, false);
+        }, delay);
+    }
+
+    function seleccionarOpcion(tipo) {
+        const inputContainer = document.getElementById("chat-input-container");
+        if (inputContainer) inputContainer.classList.add("hidden");
+        
+        if(tipo === 'pagos') {
+            appendMensaje("Métodos de Pago", true);
+            responderConDelay(
+                "💳 **Nuestros métodos autorizados:**<br><br>" +
+                "• **Transferencia Bancaria:** Congelás el stock de inmediato. Los datos de la cuenta te llegan por mail al finalizar la compra. Recordá subir el comprobante en la sección de facturas.<br>" +
+                "• **Mercado Pago:** Pagás con dinero en cuenta, tarjeta de débito o crédito en hasta 3 cuotas."
+            );
+        } 
+        else if(tipo === 'envios') {
+            appendMensaje("Tiempos de Envío", true);
+            responderConDelay(
+                "📦 **Logística y Despachos:**<br><br>" +
+                "• Hacemos envíos a todo el país vía **Andreani** y **Correo Argentino**.<br>" +
+                "• Una vez que el pago de tu orden es aprobado por administración, el pedido se embala y despacha en un plazo de **24/48 horas hábiles**.<br>" +
+                "• El código de seguimiento te va a llegar automáticamente al mail."
+            );
+        } 
+        else if(tipo === 'estado_orden') {
+            appendMensaje("Estado de mi Orden", true);
+            setTyping(true);
+            setTimeout(() => {
+                setTyping(false);
+                appendMensaje("🚀 **Rastreador de Hardware en Tiempo Real**<br><br>Por favor, ingresá **solo el número** de tu ticket (ejemplo: `14`) acá abajo para pegarle a nuestra base de datos:");
+                if (inputContainer) {
+                    inputContainer.classList.remove("hidden");
+                    const userInput = document.getElementById("chat-user-input");
+                    if (userInput) userInput.focus();
+                }
+            }, 600);
+        }
+        else if(tipo === 'garantia') {
+            appendMensaje("Políticas de Garantía", true);
+            responderConDelay(
+                "🛡️ **Garantía Oficial:**<br><br>" +
+                "• Todos nuestros componentes de hardware cuentan con **6 meses de garantía directa** con nuestra tienda por fallas de fábrica.<br>" +
+                "• Además, conservás la caja y folletos originales para gestionar la garantía extendida del fabricante (AMD, Intel, ASUS, Corsair, etc.)."
+            );
+        }
+        else if(tipo === 'ubicacion') {
+            appendMensaje("Puntos de Retiro", true);
+            responderConDelay(
+                "📍 **Punto de Entrega Central:**<br><br>" +
+                "• Si sos de la zona, podés coordinar el retiro sin cargo en nuestro showroom comercial ubicado en **Colón, Entre Ríos**.<br>" +
+                "• Los horarios de retiro son de Lunes a Viernes de 09:00 a 12:30 hs y de 16:00 a 20:00 hs. Esperá la confirmación de 'Listo para Retirar' antes de pasar."
+            );
+        }
+        else if(tipo === 'soporte') {
+            appendMensaje("Soporte Técnico Especializado", true);
+            
+            // 📝 Configurá tu número (Ej: 549 + código de área + número, todo junto sin espacios)
+            const telefono = "5493446332679"; 
+            const mensajeEncodado = encodeURIComponent("¡Hola! Vengo desde la web de Luvox y necesito realizar una consulta de soporte técnico.");
+            const urlWhatsapp = `https://wa.me/${telefono}?text=${mensajeEncodado}`;
+
+            responderConDelay(
+                "👨‍💻 **¿Tenés dudas de compatibilidad o fallas?**<br><br>" +
+                "• Si necesitás asistencia para armar tu presupuesto o saber si una fuente se banca tu placa de video, podés dejarnos un mensaje directo a nuestro equipo técnico de guardia vía WhatsApp haciendo " +
+                `<a href="${urlWhatsapp}" target="_blank" class="text-purple-400 font-bold hover:underline inline-flex items-center gap-1">clic acá <i class="fa-brands fa-whatsapp text-emerald-400"></i></a>.`
+            );
+        }
+    }
+
+    async function ejecutarConsultaOrden() {
+        const input = document.getElementById("chat-user-input");
+        if (!input) return;
+        
+        const orderId = input.value.trim();
+        if(!orderId) return;
+
+        appendMensaje(`Consultar orden #${orderId}`, true);
+        input.value = "";
+        
+        const inputContainer = document.getElementById("chat-input-container");
+        if (inputContainer) inputContainer.classList.add("hidden");
+
+        if(isNaN(orderId)) {
+            responderConDelay("⚠️ El identificador de orden debe ser un número entero. Volvé a tocar la opción **Mi Orden** e intentalo de nuevo.");
+            return;
+        }
+
+        setTyping(true);
+
+        try {
+            const response = await fetch(`/api/order-public-status/${orderId}`);
+            const data = await response.json();
+
+            setTimeout(() => {
+                setTyping(false);
+                if(response.ok && data.success) {
+                    let estadoHumanizado = 'Pendiente de aprobación';
+                    if(data.status === 'approved') estadoHumanizado = '✅ Aprobado (Preparando embalaje)';
+                    if(data.status === 'rejected') estadoHumanizado = '❌ Rechazado (Contactate con soporte)';
+                    if(data.shipping_status === 'Enviado') estadoHumanizado = '🚚 ¡En camino al correo!';
+
+                    let respuestaBot = `🔍 **Resultado de la Orden #${orderId}:**<br><br>` +
+                                       `• **Cliente:** ${data.name}<br>` +
+                                       `• **Pago:** ${estadoHumanizado}<br>` +
+                                       `• **Envío:** ${data.shipping_status || 'Pendiente'}`;
+
+                    if(data.tracking_code) {
+                        respuestaBot += `<br>• **Seguimiento:** <span class="font-mono bg-slate-800 border border-slate-700 text-cyan-400 px-1.5 py-0.5 rounded select-all">${data.tracking_code}</span>`;
+                    }
+                    appendMensaje(respuestaBot);
+                } else {
+                    appendMensaje(`❌ No encontramos ninguna orden asociada al identificador **#${orderId}**. Revisá el número que te figura en el mail de confirmación.`);
+                }
+            }, 800);
+
+        } catch (error) {
+            console.error(error);
+            setTimeout(() => {
+                setTyping(false);
+                appendMensaje("🔌 Error de enlace con el servidor. No pudimos consultar la base de datos. Probá en un ratito.");
+            }, 800);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const sendBtn = document.getElementById("chat-send-btn");
+        const userInput = document.getElementById("chat-user-input");
+
+        if (sendBtn) sendBtn.onclick = ejecutarConsultaOrden;
+        if (userInput) {
+            userInput.onkeypress = function(e) {
+                if(e.key === 'Enter') ejecutarConsultaOrden();
+            };
+        }
+    });
+</script>
+</body>
+</html>
