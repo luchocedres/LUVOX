@@ -1,0 +1,45 @@
+/* Forzar el fondo oscuro de LUVOX en todo el ecosistema desde el inicio */
+html, body {
+    background-color: #060913 !important;
+    color: #f3f4f6;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, .font-display {
+    font-family: 'Space Grotesk', sans-serif;
+}
+
+/* Panel translúcido con efecto blur */
+.glass-panel {
+    background: rgba(15, 22, 38, 0.7);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* Scrollbars sutiles para el carrito */
+::-webkit-scrollbar {
+    width: 5px;
+}
+::-webkit-scrollbar-track {
+    background: #060913;
+}
+::-webkit-scrollbar-thumb {
+    background: #1f2937;
+    border-radius: 99px;
+}
+.group:hover .group-hover\:scale-102 {
+    transform: scale(1.02);
+}
+/* Ocultar barra de scroll en el contenedor de categorías manteniendo el deslizamiento */
+#categoriesNavContainer {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+#categoriesNavContainer::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+}

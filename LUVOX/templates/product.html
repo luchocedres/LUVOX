@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} | LUVOX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+    <header class="glass-panel border-b border-gray-900 h-20 flex items-center">
+        <div class="max-w-7xl mx-auto px-4 w-full"><a href="/" class="text-white text-xs font-bold"><i class="fa-solid fa-arrow-left mr-2"></i>Volver a la Tienda</a></div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-12 flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div class="bg-gray-900 p-6 rounded-3xl border border-gray-800 flex items-center justify-center h-80">
+            <img src="{{ product.image }}" class="max-h-full object-contain rounded-2xl">
+        </div>
+        <div class="space-y-4">
+            <span class="text-xs text-cyan-400 uppercase font-bold tracking-widest">{{ product.category }}</span>
+            <h1 class="text-2xl font-bold text-white font-display">{{ product.name }}</h1>
+            <p class="text-gray-400 text-sm leading-relaxed">{{ product.description }}</p>
+            <div class="text-xl font-bold text-white pt-2">ARS ${{ product.salePrice.toLocaleString('es-AR') }}</div>
+            <p class="text-xs text-gray-500 font-mono">Unidades Críticas en Rack: {{ product.stock }} u.</p>
+            <button onclick="comprarDesdeDetalle({{ product.id }}, '${{ product.name }}', {{ product.salePrice }}, '{{ product.image }}')" class="w-full py-3.5 bg-gradient-to-r from-purple-500 to-cyan-500 text-black font-bold text-xs rounded-xl uppercase tracking-wider cursor-pointer">Inyectar Directo al Carrito</button>
+        </div>
+    </main>
+
+    <div id="toast" class="fixed bottom-4 left-4 z-50 bg-gray-950 border border-cyan-500/20 text-white px-4 py-3 rounded-2xl text-xs opacity-0 translate-y-10 transition-all duration-300">Producto añadido. Redirigiendo...</div>
+
+    <script src="{{ url_for('static', filename='product.js') }}"></script>
+</body>
+</html>

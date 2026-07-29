@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecosistema LUVOX | Éxito</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="glass-panel max-w-md w-full p-8 rounded-3xl border border-gray-900 text-center space-y-6 shadow-2xl">
+        <div class="w-16 h-16 bg-emerald-950/40 border border-emerald-500/30 rounded-2xl flex items-center justify-center text-emerald-400 mx-auto text-2xl shadow-lg"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="space-y-1">
+            <h2 class="font-display font-bold text-xl text-white">¡Orden Recibida con Éxito!</h2>
+            <p class="text-xs text-gray-500 font-mono">Pedido ID: <span class="text-cyan-400">#{{ orderId }}</span></p>
+        </div>
+        
+        <p class="text-xs text-gray-400 leading-relaxed">Tu solicitud ha ingresado correctamente al ecosistema. El total neto es de <span class="text-white font-bold">ARS ${{ total }}</span>.</p>
+
+        {% if method == 'transfer' %}
+        <div class="bg-gray-950 p-4 rounded-xl border border-gray-900 text-left space-y-2">
+            <p class="text-cyan-400 font-bold text-xs"><i class="fa-solid fa-university mr-1"></i> DATOS DE TRANSFERENCIA:</p>
+            <p class="text-gray-400 text-[11px]">Banco: <span class="text-white font-medium">Mercado Pago</span></p>
+            <p class="text-gray-400 text-[11px]">Alias: <span class="text-white font-medium">luvox.ecosystem.mp</span></p>
+            <p class="text-gray-400 text-[11px]">CBU: <span class="text-white font-medium">0000003100012345678901</span></p>
+        </div>
+        {% else %}
+        <div class="bg-gray-950 p-4 rounded-xl border border-gray-900 text-left text-xs text-gray-400">
+            <p class="text-orange-400 font-bold mb-1"><i class="fa-solid fa-truck-ramp-box mr-1"></i>Pago en Efectivo Acordado</p>
+            Prepararemos tus dispositivos de inmediato. Nos comunicaremos a tu teléfono para coordinar la entrega en mano.
+        </div>
+        {% endif %}
+
+        <div class="pt-2">
+    <a href="/" class="inline-block px-6 py-2.5 bg-gradient-to-r from-purple-500 to-cyan-500 text-white font-bold text-xs rounded-xl shadow-md uppercase tracking-wider hover:opacity-95 transition-opacity">
+        Volver al Catálogo
+    </a>
+</div>
+</body>
+</html>
