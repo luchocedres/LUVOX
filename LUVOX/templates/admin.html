@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUVOX | Consola de Administración Total</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+        .glass-panel { background: rgba(11, 17, 34, 0.75); backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-[#060913] text-gray-100 min-h-screen">
+
+    <header class="glass-panel border-b border-gray-900 sticky top-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-500 to-cyan-500 flex items-center justify-center font-display font-bold text-white text-xl">L</div>
+                <div>
+                    <h1 class="font-display font-bold text-xl tracking-tight text-white">LUVOX Central Node</h1>
+                    <p class="text-[9px] block text-purple-400 font-medium tracking-widest uppercase font-mono">Consola de Control de Ecosistema</p>
+                </div>
+            </div>
+            
+            <nav class="flex bg-slate-950 p-1 rounded-xl border border-gray-900 font-mono text-xs">
+                <button onclick="switchTab('orders')" id="tabBtn-orders" class="px-4 py-2 rounded-lg text-white bg-purple-600 font-bold transition-all cursor-pointer">
+                    <i class="fa-solid fa-receipt mr-1"></i> Órdenes
+                </button>
+                <button onclick="switchTab('inventory')" id="tabBtn-inventory" class="px-4 py-2 rounded-lg text-gray-400 hover:text-white transition-all cursor-pointer">
+                    <i class="fa-solid fa-boxes-stacked mr-1"></i> Inventario y Categorías
+                </button>
+            </nav>
+
+            <a href="/" class="text-xs bg-gray-950 border border-gray-800 px-4 py-2 rounded-xl text-gray-400 hover:text-white transition-all font-mono">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Ver Tienda
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <div id="tab-orders" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="glass-panel p-4 rounded-2xl border border-gray-900 flex items-center justify-between">
+                    <div><span class="text-[10px] text-gray-500 font-mono block uppercase">Por Validar</span><span id="countPendientes" class="text-xl font-bold font-display text-purple-400">0</span></div>
+                    <div class="w-9 h-9 rounded-xl bg-purple-950/40 text-purple-400 flex items-center justify-center text-xs"><i class="fa-solid fa-clock"></i></div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-900 flex items-center justify-between">
+                    <div><span class="text-[10px] text-gray-500 font-mono block uppercase">Aprobadas</span><span id="countAprobadas" class="text-xl font-bold font-display text-cyan-400">0</span></div>
+                    <div class="w-9 h-9 rounded-xl bg-cyan-950/40 text-cyan-400 flex items-center justify-center text-xs"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-900 flex items-center justify-between">
+                    <div><span class="text-[10px] text-gray-500 font-mono block uppercase">Rechazadas</span><span id="countRechazadas" class="text-xl font-bold font-display text-rose-500">0</span></div>
+                    <div class="w-9 h-9 rounded-xl bg-rose-950/40 text-rose-500 flex items-center justify-center text-xs"><i class="fa-solid fa-circle-xmark"></i></div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-900 flex items-center justify-between bg-gradient-to-b from-slate-950/40 to-emerald-950/10">
+                    <div><span class="text-[10px] text-emerald-500 font-mono block uppercase font-bold">Caja Total</span><span id="statIngresos" class="text-xl font-bold font-display text-emerald-400">$0</span></div>
+                    <div class="w-9 h-9 rounded-xl bg-emerald-950/40 text-emerald-400 flex items-center justify-center text-xs"><i class="fa-solid fa-money-bill-wave"></i></div>
+                </div>
+                <div class="glass-panel p-4 rounded-2xl border border-gray-900 flex items-center justify-between">
+                    <div><span class="text-[10px] text-gray-500 font-mono block uppercase">Ticket Promedio</span><span id="statTicketPromedio" class="text-xl font-bold font-display text-amber-400">$0</span></div>
+                    <div class="w-9 h-9 rounded-xl bg-amber-950/40 text-amber-400 flex items-center justify-center text-xs"><i class="fa-solid fa-chart-line"></i></div>
+                </div>
+            </div>
+
+            <div class="glass-panel p-3 rounded-xl border border-gray-900 flex flex-col sm:flex-row gap-3 items-center">
+                <div class="w-full relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-xs"></i>
+                    <input type="text" id="adminOrderSearch" oninput="filtrarOrdenesEnTiempoReal()" placeholder="Buscar orden por ID, nombre del cliente, Gmail o ciudad..." class="w-full bg-slate-950 border border-gray-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500 font-mono transition-colors">
+                </div>
+                <button onclick="limpiarBuscador()" class="text-[10px] uppercase font-mono px-3 py-2 bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-xl transition-colors cursor-pointer text-gray-400 hover:text-white shrink-0">
+                    Limpiar Filtro
+                </button>
+            </div>
+
+            <section class="glass-panel rounded-2xl border border-gray-900 overflow-hidden">
+                <div class="p-4 border-b border-gray-900 flex items-center justify-between bg-slate-950/30">
+                    <h3 class="font-display font-bold text-xs uppercase tracking-wider text-white">Cola de Verificación de Transferencias</h3>
+                    <button onclick="cargarOrdenesAdmin()" class="p-1.5 bg-gray-900 hover:bg-gray-800 text-gray-400 hover:text-white rounded-lg border border-gray-800 transition-colors"><i class="fa-solid fa-rotate-right text-[10px]"></i></button>
+                    <button onclick="despacharOrden('${orden.id}')" class="flex items-center gap-1 bg-emerald-950/40 border border-emerald-900/60 hover:bg-emerald-600 text-emerald-400 hover:text-white rounded-lg px-2 py-1 transition-all text-[10px] cursor-pointer">
+    <i class="fa-solid fa-truck text-[10px]"></i> Enviado
+</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead class="bg-slate-950 text-gray-400 uppercase text-[9px] tracking-wider border-b border-gray-900">
+                            <tr>
+                                <th class="p-3">ID</th>
+                                <th class="p-3">Cliente</th>
+                                <th class="p-3 text-purple-400">Gmail</th>
+                                <th class="p-3">Destino</th>
+                                <th class="p-3">Detalle Hardware</th>
+                                <th class="p-3 bg-purple-950/10 text-center">Ref. Pago</th>
+                                <th class="p-3">Monto Neto</th>
+                                <th class="p-3 text-center">Estado Pago</th>
+                                <th class="p-3 text-center">Despacho</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminOrdersTableBody" class="divide-y divide-gray-900 text-[11px]"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div id="tab-inventory" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <section class="lg:col-span-4 glass-panel rounded-2xl p-5 border border-gray-900 space-y-4">
+                <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+                    <h3 id="formTitle" class="font-display font-bold text-xs uppercase tracking-wider text-white">Inyectar Hardware</h3>
+                    <button id="btnResetForm" onclick="resetForm()" class="hidden text-[10px] text-purple-400 underline font-mono">Cancelar Edición</button>
+                </div>
+                <form id="adminProductForm" onsubmit="console.log('Freno HTML activado'); event.preventDefault(); procesarFormularioProducto(event);" class="space-y-3 text-xs">
+                    <input type="hidden" id="prodId">
+                    <div>
+                        <input type="text" id="prodName" required placeholder="Nombre del Dispositivo" class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 font-mono">
+                    </div>
+                    <div>
+                        <select id="prodCategory" required class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 font-mono"></select>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="block text-[8px] text-gray-500 font-mono uppercase mb-0.5">Precio ARS</label>
+                            <input type="number" id="prodPrice" required placeholder="Base" class="w-full bg-slate-950 border border-gray-800 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-purple-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-[8px] text-purple-400 font-mono uppercase mb-0.5">En Oferta</label>
+                            <input type="number" id="prodPromoPrice" placeholder="Tachado" class="w-full bg-slate-950 border border-gradient text-purple-300 font-bold border-purple-900/60 rounded-xl px-2 py-2 focus:outline-none focus:border-purple-500 font-mono" title="Dejar en 0 si no está en descuento">
+                        </div>
+                        <div>
+                            <label class="block text-[8px] text-gray-500 font-mono uppercase mb-0.5">Stock</label>
+                            <input type="number" id="prodStock" required placeholder="Cant." class="w-full bg-slate-950 border border-gray-800 rounded-xl px-2 py-2 text-white focus:outline-none focus:border-purple-500 font-mono">
+                        </div>
+                    </div>
+                    <div>
+                        <input type="url" id="prodImage" required placeholder="URL Imagen de Portada" class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-[9px] uppercase font-mono text-purple-400 mb-1 font-bold">Galería (Pegá URLs separadas por coma)</label>
+                        <textarea id="prodGallery" rows="2" placeholder="https://link1.png, https://link2.png" class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 font-mono text-[10px]"></textarea>
+                    </div>
+                    <div>
+                        <textarea id="prodSpecs" rows="3" placeholder="Especificaciones técnicas avanzadas del hardware..." class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 font-mono"></textarea>
+                    </div>
+                    
+                    <div class="flex items-center gap-4 py-1 text-gray-400">
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="prodIsFeatured" class="accent-purple-500"> Destacar
+                        </label>
+                        <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                            <input type="checkbox" id="prodIsFlashSale" class="accent-cyan-500"> Oferta Flash
+                        </label>
+                    </div>
+
+                    <button type="submit" id="btnSubmitForm" class="w-full py-2.5 bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90 text-white font-bold rounded-xl uppercase tracking-wider font-mono transition-opacity cursor-pointer">Sincronizar Ecosistema</button>
+                </form>
+
+                <div class="border-t border-gray-900 pt-4 mt-2 space-y-2">
+                    <h4 class="font-display font-bold text-[10px] text-gray-400 uppercase tracking-widest font-mono">Inyectar / Eliminar Categorías</h4>
+                    <div class="flex gap-1">
+                        <input type="text" id="newCategoryInput" placeholder="NUEVA CATEGORÍA" class="w-full bg-slate-950 border border-gray-800 rounded-xl px-3 py-1.5 text-xs font-mono uppercase text-white">
+                        <button onclick="crearCategoria()" class="px-3 bg-cyan-600 text-white font-bold rounded-xl text-xs cursor-pointer">+</button>
+                    </div>
+                    <div id="categoriesListTags" class="flex flex-wrap gap-1 pt-1"></div>
+                </div>
+            </section>
+
+            <section class="lg:col-span-8 glass-panel rounded-2xl border border-gray-900 overflow-hidden shadow-xl">
+                <div class="p-4 border-b border-gray-900 bg-slate-950/30">
+                    <h3 class="font-display font-bold text-xs uppercase tracking-wider text-white">Catálogo de Dispositivos Activos</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs font-mono">
+                        <thead class="bg-slate-950 text-gray-400 uppercase text-[9px] border-b border-gray-900">
+                            <tr>
+                                <th class="p-3">Portada</th>
+                                <th class="p-3">Hardware / Categoría</th>
+                                <th class="p-3">Precio Base</th>
+                                <th class="p-3 text-purple-400">Oferta</th>
+                                <th class="p-3 text-center">Stock</th>
+                                <th class="p-3 text-center">Imágenes</th>
+                                <th class="p-3 text-right">Controles</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminProductsTableBody" class="divide-y divide-gray-900 text-[11px]"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='admin.js') }}"></script>
+
+    <script>
+        let _cacheOrdenesLuvox = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const originalFetch = window.fetch;
+            window.fetch = async function(...args) {
+                const response = await originalFetch.apply(this, args);
+                if (args[0] === '/api/admin/orders' || (args[0] && args[0].includes('/api/admin/orders'))) {
+                    const clone = response.clone();
+                    try {
+                        _cacheOrdenesLuvox = await clone.json();
+                        setTimeout(() => {
+                            calcularMetricasDashboard(_cacheOrdenesLuvox);
+                        }, 150);
+                    } catch(e) { console.error(e); }
+                }
+                return response;
+            };
+
+            setTimeout(() => {
+                if (typeof orders !== 'undefined' && orders.length > 0) {
+                    _cacheOrdenesLuvox = orders;
+                    calcularMetricasDashboard(_cacheOrdenesLuvox);
+                }
+            }, 600);
+        });
+
+        function calcularMetricasDashboard(ordenes) {
+            if(!ordenes || ordenes.length === 0) return;
+            
+            let aprobadas = ordenes.filter(o => o.status === 'approved' || o.estado === 'approved');
+            let totalCaja = aprobadas.reduce((sum, o) => sum + Number(o.total || 0), 0);
+            let ticketProm = aprobadas.length > 0 ? Math.round(totalCaja / aprobadas.length) : 0;
+            
+            const txtCaja = document.getElementById("statIngresos");
+            const txtTicket = document.getElementById("statTicketPromedio");
+            
+            if(txtCaja) txtCaja.textContent = `$${totalCaja.toLocaleString('es-AR')}`;
+            if(txtTicket) txtTicket.textContent = `$${ticketProm.toLocaleString('es-AR')}`;
+        }
+
+        function filtrarOrdenesEnTiempoReal() {
+            const query = document.getElementById("adminOrderSearch").value.toLowerCase().trim();
+            const tabla = document.getElementById("adminOrdersTableBody");
+            if (!tabla) return;
+            const filas = tabla.getElementsByTagName("tr");
+
+            for (let i = 0; i < filas.length; i++) {
+                const fila = filas[i];
+                const textoFila = fila.textContent.toLowerCase();
+                fila.style.display = textoFila.includes(query) ? "" : "none";
+            }
+        }
+
+        function limpiarBuscador() {
+            const input = document.getElementById("adminOrderSearch");
+            if (input) {
+                input.value = "";
+                filtrarOrdenesEnTiempoReal();
+            }
+        }
+    </script>
+</body>
+</html>
