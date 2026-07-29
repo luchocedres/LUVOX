@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
+from werkzeug.security import check_password_hash
+from functools import wraps
 import random
 import json
 import os
@@ -11,10 +13,39 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# CONFIGURACIÓN DE LA BASE DE DATOS SQLITE REAL
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://lucho:ZRcQZnXihKSyx7gxhvKMhmEA6BV48j3e@dpg-d8ukc6og4nts73fu74rg-a.oregon-postgres.render.com/luvox_db'
+# 🔒 Clave usada para firmar la cookie de sesión — viene del .env, nunca hardcodeada
+app.secret_key = os.getenv('SECRET_KEY')
+if not app.secret_key:
+    raise RuntimeError("Falta SECRET_KEY en el .env — generá una con: python -c \"import secrets; print(secrets.token_hex(32))\"")
+
+# CONFIGURACIÓN DE LA BASE DE DATOS — la URL completa (con usuario y contraseña) vive en .env
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+if not app.config['SQLALCHEMY_DATABASE_URI']:
+    raise RuntimeError("Falta DATABASE_URL en el .env")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+# Credenciales de admin — usuario en texto plano, contraseña como HASH (nunca en texto plano)
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME')
+ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH')
+
+def login_required_page(f):
+    """Para rutas que devuelven HTML: si no hay sesión, redirige a /login."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get('is_admin'):
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated
+
+def login_required_api(f):
+    """Para rutas de la API de admin: si no hay sesión, devuelve 401 en JSON."""
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get('is_admin'):
+            return jsonify({"success": False, "message": "No autenticado"}), 401
+        return f(*args, **kwargs)
+    return decorated
 
 # CONFIGURACIÓN DE FLASK-MAIL (PARA GMAIL) - BLINDADO CON .ENV
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -324,10 +355,30 @@ def create_order():
         return jsonify({"success": False, "message": "El carrito está vacío"}), 400
         
     order_id = random.randint(10000, 99999)
+    while Order.query.filter_by(orderId=order_id).first() is not None:
+        order_id = random.randint(10000, 99999)
     total_neto = 0
+    cart_verificado = []
     for item in data['cart']:
-        precio = item['promoPrice'] if (item.get('promoPrice') and item['promoPrice'] > 0) else item['salePrice']
-        total_neto += precio * item['quantity']
+        # 🔒 El precio y el stock se leen de la base, nunca del carrito que mandó el navegador.
+        # Así nadie puede editar el precio desde las herramientas de desarrollador antes de pagar.
+        producto = Product.query.get(item.get('id'))
+        if not producto:
+            return jsonify({"success": False, "message": f"Producto {item.get('id')} no existe"}), 400
+
+        cantidad = item.get('quantity', 0)
+        if not isinstance(cantidad, int) or cantidad <= 0:
+            return jsonify({"success": False, "message": "Cantidad inválida en el carrito"}), 400
+
+        if cantidad > producto.stock:
+            return jsonify({"success": False, "message": f"Sin stock suficiente de {producto.name}"}), 400
+
+        precio_real = producto.promoPrice if (producto.promoPrice and producto.promoPrice > 0) else producto.salePrice
+        total_neto += precio_real * cantidad
+        cart_verificado.append({
+            "id": producto.id, "name": producto.name, "salePrice": producto.salePrice,
+            "promoPrice": producto.promoPrice, "image": producto.image, "quantity": cantidad
+        })
         
     nueva_orden = Order(
         orderId=order_id,
@@ -339,7 +390,7 @@ def create_order():
         shippingMethod=data.get('shippingMethod', 'No especificado'),
         paymentMethod=data.get('paymentMethod', 'transfer'),
         paymentRef=data.get('paymentRef', 'N/A'),
-        cart_json=json.dumps(data.get('cart', [])),
+        cart_json=json.dumps(cart_verificado),
         total=total_neto,
         status="pending",
         shipping_status="Pendiente"
@@ -362,19 +413,60 @@ def create_order():
         return jsonify({"success": False, "message": "Error interno al procesar el pedido"}), 500
 
 # ==========================================
+#     CONSULTA PÚBLICA DE ESTADO DE ORDEN (para el chatbot)
+# ==========================================
+@app.route('/api/order-public-status/<int:order_id>', methods=['GET'])
+def order_public_status(order_id):
+    orden = Order.query.filter_by(orderId=order_id).first()
+    if not orden:
+        return jsonify({"success": False, "message": "Orden no encontrada"}), 404
+
+    # Solo devolvemos lo necesario para que el cliente siga su pedido —
+    # nunca teléfono, email ni dirección en esta ruta pública.
+    return jsonify({
+        "success": True,
+        "name": orden.name,
+        "status": orden.status,
+        "shipping_status": orden.shipping_status,
+        "tracking_code": orden.tracking_code
+    })
+
+# ==========================================
+#          LOGIN / LOGOUT
+# ==========================================
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username', '')
+        password = request.form.get('password', '')
+        if username == ADMIN_USERNAME and ADMIN_PASSWORD_HASH and check_password_hash(ADMIN_PASSWORD_HASH, password):
+            session['is_admin'] = True
+            return redirect(url_for('admin_panel'))
+        return render_template('login.html', error="Usuario o contraseña incorrectos.")
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('is_admin', None)
+    return redirect(url_for('login'))
+
+# ==========================================
 #          RUTAS DEL PANEL (ADMIN)
 # ==========================================
 @app.route('/admin')
+@login_required_page
 def admin_panel():
     return render_template('admin.html')
 
 @app.route('/api/admin/orders', methods=['GET'])
+@login_required_api
 def get_admin_orders():
     all_orders = Order.query.order_by(Order.id.desc()).all()
     return jsonify([o.to_dict() for o in all_orders])
 
 # ESTA ES LA RUTA QUE RESPONDE AL DAR CLIC EN APROBAR O RECHAZAR EN TU PANEL
 @app.route('/api/admin/orders/<int:order_id>/status', methods=['PUT'])
+@login_required_api
 def actualizar_status_pago(order_id):
     data = request.get_json()
     nuevo_estado = data.get('status') # 'approved' o 'rejected'
@@ -400,6 +492,7 @@ def actualizar_status_pago(order_id):
     return jsonify({'success': True, 'message': f'Pago actualizado a {nuevo_estado} y cliente notificado.'})
 
 @app.route('/api/admin/orders/<int:order_id>/shipping', methods=['PUT'])
+@login_required_api
 def update_shipping_status(order_id):
     data = request.json
     nuevo_estado = data.get('status')
@@ -417,6 +510,7 @@ def update_shipping_status(order_id):
 
 # --- ABM PRODUCTOS ---
 @app.route('/api/admin/products', methods=['POST'])
+@login_required_api
 def create_product():
     data = request.json
     gallery_raw = data.get('gallery', '')
@@ -440,6 +534,7 @@ def create_product():
     return jsonify({"success": True, "product": nuevo_prod.to_dict()})
 
 @app.route('/api/admin/products/<int:prod_id>', methods=['PUT', 'DELETE'])
+@login_required_api
 def handle_product_crud(prod_id):
     prod = Product.query.get(prod_id)
     if not prod:
@@ -472,6 +567,7 @@ def handle_product_crud(prod_id):
 
 # --- GESTIÓN DE CATEGORÍAS ---
 @app.route('/api/admin/categories', methods=['POST'])
+@login_required_api
 def add_category():
     data = request.json
     nueva_cat = data.get('name', '').upper().strip()
@@ -481,6 +577,7 @@ def add_category():
     return jsonify({"success": False, "message": "Categoría inválida o ya existente"}), 400
 
 @app.route('/api/admin/categories', methods=['DELETE'])
+@login_required_api
 def remove_category():
     data = request.json
     cat_a_borrar = data.get('name', '').upper().strip()
@@ -490,6 +587,7 @@ def remove_category():
     return jsonify({"success": False, "message": "Categoría no encontrada"}), 404
 
 @app.route('/api/admin/orders/<int:order_id>/despachar', methods=['PUT'])
+@login_required_api
 def despachar_orden(order_id):
     data = request.get_json()
     tracking = data.get('tracking_code')
