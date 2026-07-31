@@ -17,6 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loadStoreProducts();
     loadStoreCategories(); // Inicializa la carga dinámica de categorías
     initFormConsultaGmail(); // Inicializa el listener del formulario de contacto
+
+    // 🔧 Conecta el formulario de checkout con la función que arma y manda el pedido.
+    // Sin esto, el botón "Procesar Orden" hace un submit normal del navegador
+    // (recarga de página) en vez de mandar el pedido por fetch.
+    const checkoutForm = document.getElementById("checkoutForm");
+    if (checkoutForm) checkoutForm.addEventListener("submit", procesarOrdenDirecta);
 });
 
 // Carga e inyecta las categorías dinámicas directo desde el Backend

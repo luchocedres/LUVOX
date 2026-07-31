@@ -6,10 +6,16 @@ from functools import wraps
 import random
 import json
 import os
+import socket
 from dotenv import load_dotenv
 
 # 🔥 Cargar las variables del archivo .env
 load_dotenv()
+
+# 🔒 Límite de 10 segundos para cualquier conexión de red (SMTP incluido).
+# Sin esto, si Gmail tarda en responder, Render mata todo el proceso antes
+# de que el try/except del código llegue siquiera a enterarse del error.
+socket.setdefaulttimeout(10)
 
 app = Flask(__name__)
 
@@ -483,11 +489,17 @@ def actualizar_status_pago(order_id):
     # Según lo que vino del JavaScript, disparamos el flujo correspondiente
     if nuevo_estado == 'approved':
         print(f"📧 Disparando correo de Aprobación para la Orden #{order_id}...")
-        enviar_correo_aprobado(orden)
-        
+        try:
+            enviar_correo_aprobado(orden)
+        except Exception as mail_err:
+            print(f"Alerta: Falló el envío del mail de aprobación: {mail_err}")
+
     elif nuevo_estado == 'rejected':
         print(f"📧 Disparando correo de Rechazo para la Orden #{order_id}...")
-        enviar_correo_rechazado(orden)
+        try:
+            enviar_correo_rechazado(orden)
+        except Exception as mail_err:
+            print(f"Alerta: Falló el envío del mail de rechazo: {mail_err}")
     
     return jsonify({'success': True, 'message': f'Pago actualizado a {nuevo_estado} y cliente notificado.'})
 
@@ -605,7 +617,10 @@ def despachar_orden(order_id):
     orden.tracking_code = tracking
     db.session.commit()
     
-    enviar_mail_despacho(orden)
+    try:
+        enviar_mail_despacho(orden)
+    except Exception as mail_err:
+        print(f"Alerta: Falló el envío del mail de despacho: {mail_err}")
     
     return jsonify({
         'success': True, 
