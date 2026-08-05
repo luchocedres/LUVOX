@@ -7,14 +7,22 @@ import random
 import json
 import os
 import socket
+import requests
 from dotenv import load_dotenv
 
 # 🔥 Cargar las variables del archivo .env
 load_dotenv()
 
-# 🔒 Límite de 10 segundos para cualquier conexión de red (SMTP incluido).
-# Sin esto, si Gmail tarda en responder, Render mata todo el proceso antes
-# de que el try/except del código llegue siquiera a enterarse del error.
+# 🔒 Forzar IPv4 en TODAS las conexiones salientes (SMTP, HTTPS, lo que sea).
+# Render a veces no tiene bien ruteada la salida por IPv6, y como Python intenta
+# conectar por ahí primero, cualquier conexión saliente falla con
+# "[Errno 101] Network is unreachable" — pase lo que pase del lado de Brevo/Gmail.
+_original_getaddrinfo = socket.getaddrinfo
+def _getaddrinfo_ipv4_only(host, port, family=0, type=0, proto=0, flags=0):
+    return _original_getaddrinfo(host, port, socket.AF_INET, type, proto, flags)
+socket.getaddrinfo = _getaddrinfo_ipv4_only
+
+# 🔒 Límite de 10 segundos para cualquier conexión de red.
 socket.setdefaulttimeout(10)
 
 app = Flask(__name__)
@@ -140,6 +148,37 @@ class Order(db.Model):
 # ==========================================
 
 # 1. Correo de Confirmación Inicial (Pedido Recibido)
+BREVO_API_KEY = os.getenv('BREVO_API_KEY')
+BREVO_SENDER_EMAIL = os.getenv('MAIL_USERNAME')
+
+def enviar_email_brevo(destinatario, asunto, html_content):
+    """
+    Manda un mail transaccional a través de la API HTTP de Brevo, en vez de
+    una conexión SMTP directa. Render bloquea las conexiones SMTP salientes
+    en el plan gratis ([Errno 101] Network is unreachable) — esto lo esquiva
+    porque viaja como un pedido HTTPS normal, igual que cualquier fetch().
+    """
+    if not BREVO_API_KEY:
+        raise RuntimeError("Falta BREVO_API_KEY en el .env")
+
+    response = requests.post(
+        "https://api.brevo.com/v3/smtp/email",
+        headers={
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        },
+        json={
+            "sender": {"name": "LUVOX Ecosystem", "email": BREVO_SENDER_EMAIL},
+            "to": [{"email": destinatario}],
+            "subject": asunto,
+            "htmlContent": html_content,
+        },
+        timeout=10,
+    )
+    response.raise_for_status()
+    return True
+
 def enviar_correo_confirmacion(orden):
     if not orden.email or orden.email == "No especificado" or "@" not in orden.email:
         return False
@@ -185,8 +224,7 @@ def enviar_correo_confirmacion(orden):
             </div>
         </div>
         """
-        msg = Message(subject=f"LUVOX Ecosystem | Confirmación de Orden #{orden.orderId}", recipients=[orden.email], html=html_content)
-        mail.send(msg)
+        enviar_email_brevo(orden.email, f"LUVOX Ecosystem | Confirmación de Orden #{orden.orderId}", html_content)
         return True
     except Exception as e:
         print(f"Error enviando correo inicial: {e}")
@@ -223,8 +261,7 @@ def enviar_correo_aprobado(orden):
             <p style="color: #64748b; font-size: 11px; text-align: center; margin: 0;">LUVOX Central Node - Operación Automática.</p>
         </div>
         """
-        msg = Message(subject=f"LUVOX Ecosystem | Pago APROBADO de Orden #{id_orden}", recipients=[orden.email], html=html_content)
-        mail.send(msg)
+        enviar_email_brevo(orden.email, f"LUVOX Ecosystem | Pago APROBADO de Orden #{id_orden}", html_content)
         return True
     except Exception as e:
         print(f"❌ Error enviando correo aprobado: {e}")
@@ -255,25 +292,15 @@ def enviar_correo_rechazado(orden):
             <p style="color: #64748b; font-size: 11px; text-align: center; margin: 0;">LUVOX Central Node.</p>
         </div>
         """
-        msg = Message(subject=f"LUVOX Ecosystem | Problema en Validación de Orden #{orden.orderId}", recipients=[orden.email], html=html_content)
-        mail.send(msg)
+        enviar_email_brevo(orden.email, f"LUVOX Ecosystem | Problema en Validación de Orden #{orden.orderId}", html_content)
         return True
     except Exception as e:
         print(f"Error enviando correo rechazado: {e}")
         return False
-from flask_mail import Message # O la librería de mail que estés usando
 
 def enviar_mail_despacho(order):
     try:
-        # Creamos el mensaje
-        msg = Message(
-            subject=f"🚀 ¡Tu hardware LUVOX ha sido despachado! (# {order.id})",
-            sender=app.config['MAIL_USERNAME'],
-            recipients=[order.email]
-        )
-        
-        # Estructuramos el cuerpo del mail con HTML y CSS alineado a tu marca
-        msg.html = f"""
+        html_content = f"""
         <div style="background-color: #030712; color: #f3f4f6; padding: 30px; font-family: sans-serif; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #1e1b4b;">
             <div style="text-align: center; margin-bottom: 25px;">
                 <h1 style="color: #a855f7; margin: 0; font-size: 28px; letter-spacing: 2px;">LUVOX</h1>
@@ -298,9 +325,7 @@ def enviar_mail_despacho(order):
             </p>
         </div>
         """
-        
-        # Disparamos el correo
-        mail.send(msg)
+        enviar_email_brevo(order.email, f"🚀 ¡Tu hardware LUVOX ha sido despachado! (# {order.id})", html_content)
         print(f"Mail de despacho enviado con éxito a {order.email}")
         return True
     except Exception as e:
