@@ -176,7 +176,10 @@ def enviar_email_brevo(destinatario, asunto, html_content):
         },
         timeout=10,
     )
-    response.raise_for_status()
+    if response.status_code >= 400:
+        # Mostramos el cuerpo real de la respuesta de Brevo, no solo el código HTTP —
+        # ahí viene el motivo específico (API Key sin permisos, cuenta sin activar, etc.)
+        raise RuntimeError(f"Brevo respondió {response.status_code}: {response.text}")
     return True
 
 def enviar_correo_confirmacion(orden):
